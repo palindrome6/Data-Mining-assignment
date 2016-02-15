@@ -31,81 +31,81 @@ def load_data_wrapper():
     return training_data, validation_data, test_data
 
 [training, validation, test] = load_data_wrapper()
-# def serialised_to_decimal(dataResult):
-#     index1 = 0
-#     for i in dataResult:
-#         if i == 1:
-#             return index1
-#         index1 += 1
-#
-#
-# rowSize = 784
-# numberList = np.zeros((10, rowSize))
-# countNumberList = np.zeros(10)
-#
-# for row in training:
-#     decimalResult = serialised_to_decimal(row[1])
-#     if decimalResult != -1:
-#         index2 = 0
-#         for pixel in row[0]:
-#             numberList[decimalResult][index2] += pixel
-#             index2 += 1
-#
-#         countNumberList[decimalResult] += 1
-#
-#
-# index3 = 0
-# for number in numberList:
-#     for pixel in number:
-#         pixel = pixel/countNumberList[index3]
-#         if pixel > 1:
-#             print "Error"
-#     # print ("Number")
-#     # print (index3)
-#     # print (":")
-#     # print (number)
-#     index3 += 1
-#
-# # sumc = 0
-# # for count in countNumberList:
-# #     sumc += count
-# #     print count
-# # print sumc
-#
-# cossim = np.zeros((10000,10))
-# maxcos = np.zeros(10000)
-#
-# index1 = 0
-# index2 = 0
-# for m in test:
-#     for n in numberList:
-#         numerator = 0
-#         denom1 = 0
-#         denom2 = 0
-#         for (i,k) in izip(m[0],n):
-#             numerator += i*k
-#             denom1 += i*i
-#             denom2 += k*k
-#         if (denom1 != 0 and denom2 != 0):
-#             cossim[index1][index2] =  numerator/(math.sqrt(denom1)*math.sqrt(denom2))
-#         if cossim[index1][index2] >= maxcos[index1]:
-#             maxcos[index1] = cossim[index1][index2]
-#         index2 += 1
-#     index2 = 0
-#     index1 += 1
-#
-# print cossim[0]
-# print cossim[1]
-# print cossim[2]
-# print cossim[3]
-# print cossim[4]
-# print cossim[5]
-# print cossim[6]
-# print cossim[7]
-# print cossim[8]
-# print cossim[9]
-# print cossim[10]
-# print cossim[11]
+def serialised_to_decimal(dataResult):
+    index1 = 0
+    for i in dataResult:
+        if i == 1:
+            return index1
+        index1 += 1
+
+
+rowSize = 784
+numberList = np.zeros((10, rowSize))
+countNumberList = np.zeros(10)
+
+for row in training:
+    decimalResult = serialised_to_decimal(row[1])
+    if decimalResult != -1:
+        index2 = 0
+        for pixel in row[0]:
+            numberList[decimalResult][index2] += pixel
+            index2 += 1
+
+        countNumberList[decimalResult] += 1
+
+
+index3 = 0
+for number in numberList:
+    for pixel in number:
+        pixel = pixel/countNumberList[index3]
+        if pixel > 1:
+            print "Error"
+    # print ("Number")
+    # print (index3)
+    # print (":")
+    # print (number)
+    index3 += 1
+
+# sumc = 0
+# for count in countNumberList:
+#     sumc += count
+#     print count
+# print sumc
+
+cossim = np.zeros((10000,10))
+maxcos = np.zeros(10000)
+
+index1 = 0
+index2 = 0
+for m in test:
+    for n in numberList:
+        numerator = 0
+        denom1 = 0
+        denom2 = 0
+        for (i,k) in izip(m[0],n):
+            numerator += i*k
+            denom1 += i*i
+            denom2 += k*k
+        if (denom1 != 0 and denom2 != 0):
+            cossim[index1][index2] =  numerator/(math.sqrt(denom1)*math.sqrt(denom2))
+        if cossim[index1][index2] >= maxcos[index1]:
+            maxcos[index1] = cossim[index1][index2]
+        index2 += 1
+    index2 = 0
+    index1 += 1
+
+print cossim[0]
+print cossim[1]
+print cossim[2]
+print cossim[3]
+print cossim[4]
+print cossim[5]
+print cossim[6]
+print cossim[7]
+print cossim[8]
+print cossim[9]
+print cossim[10]
+print cossim[11]
 
 print test[0][1]
 print test[1][1]
