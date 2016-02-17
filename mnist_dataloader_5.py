@@ -6,6 +6,7 @@ import cPickle
 import gzip
 import math
 from itertools import izip
+from scipy import spatial
 
 def load_data():
     f = gzip.open('./data1a/mnist.pkl.gz', 'rb')
@@ -41,42 +42,32 @@ def serialised_to_decimal(dataResult):
         index1 += 1
 
 
-cossim = np.zeros(1000)  # change 1000 to new number of test data(if needed)
-maxcos = np.zeros(1000)  # change 1000 to new number of test data(if needed)
-pred_number = np.zeros(1000)  # change 1000 to new number of test data(if needed)
-actual_number = np.zeros(1000)  # change 1000 to new number of test data(if needed)
+cossim = np.zeros(10000)  # change 1000 to new number of test data(if needed)
+maxcos = np.zeros(10000)  # change 1000 to new number of test data(if needed)
+pred_number = np.zeros(10000)  # change 1000 to new number of test data(if needed)
+actual_number = np.zeros(10000)  # change 1000 to new number of test data(if needed)
 confusion_matrix = np.zeros((10,10))
 correct_predictions = 0
-total_predictions = 1000  # change 1000 to new number of test data(if needed)
+total_predictions = 10000  # change 1000 to new number of test data(if needed)
 index1 = 0
 index2 = 0
 for m in test:
     for n in training:
-        numerator = 0
-        denom1 = 0
-        denom2 = 0
-        # Cosine similarity implementation starts here. I have made calculations manually.
-        #  compares i from test and k from training to calculate cosine similarity
-        for (i,k) in izip(m[0],n[0]):
-            numerator += i*k  # calculates dot product for numerator
-            denom1 += i*i  # calculates sum of i^2
-            denom2 += k*k  # calculates sum of k^2
-        if (denom1 != 0 and denom2 != 0):
-            cossim[index1] =  numerator/(math.sqrt(denom1)*math.sqrt(denom2)) #  calculates cosine similarity
+        cossim[index1] = 1 - spatial.distance.cosine(m[0],n[0]) #  calculates cosine similarity
         if cossim[index1] >= maxcos[index1]:
             maxcos[index1] = cossim[index1]  #  assigns maximum value of cosine similarity
             pred_number[index1] = serialised_to_decimal(training[index2][1])  #  predicted number
             actual_number[index1] = test[index1][1]  # actual number
         index2 += 1
-        if index2 == 5000:  # change 5000 to new value of training data (if needed)
+        if index2 == 50000:  # change 5000 to new value of training data (if needed)
             index2 = 0
             break
-    #print "Test sample: %d, Actual number: %d, Predicted number: %d" %(index1+1,actual_number[index1], pred_number[index1])
+    # print "Test sample: %d, Actual number: %d, Predicted number: %d" %(index1+1,actual_number[index1], pred_number[index1])
     confusion_matrix[pred_number[index1]][actual_number[index1]] += 1
     if (pred_number[index1] == actual_number[index1]):
         correct_predictions += 1;
     index1 += 1
-    if index1 == 1000: #  change 1000 to new value of test data (if needed)
+    if index1 == 10000: #  change 1000 to new value of test data (if needed)
         break
 
 
