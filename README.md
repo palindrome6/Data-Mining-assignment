@@ -4,6 +4,8 @@ It contains the MNIST data set that was downloaded from the e-book by Michael Ni
 
 The corresponding code for loading the data is located in "**mnist_dataloader.py**".  It allows you load and manipulate data much faster.
 
+"**mnist_dataloader_5.py**" containes an implementation of the nearest neighbor classifier using cosine distance. 50000 training samples and 10000 test samples are used and the resultant confusion matrix, presicion and recall values are calculated. 
+
 To read data sets for the assignment 1b you can use the script "**dataloader_1b.py**".   
 
-Python distribution with pre-compiled scientific libraries (SciPy, NumPy, Matplotlib) can be downloaded from the web page: [Anaconda for Windows / OS X / Linux](https://www.continuum.io/downloads)
+

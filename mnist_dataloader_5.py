@@ -1,11 +1,8 @@
-__author__ = 's158079'
 # Source: http://neuralnetworksanddeeplearning.com/chap1.html
 # You need only train and test sets. Simply disregard the validation set.
 import numpy as np
 import cPickle
 import gzip
-import math
-from itertools import izip
 from scipy import spatial
 
 def load_data():
@@ -13,14 +10,10 @@ def load_data():
     training_data, validation_data, test_data = cPickle.load(f)
     f.close()
     return training_data, validation_data, test_data
-
-
 def vectorized_result(j):
     e = np.zeros((10, 1))
     e[j] = 1.0
     return e
-
-
 def load_data_wrapper():
     tr_d, va_d, te_d = load_data()
     training_inputs = [np.reshape(x, (784, 1)) for x in tr_d[0]]
@@ -33,7 +26,7 @@ def load_data_wrapper():
     return training_data, validation_data, test_data
 
 [training, validation, test] = load_data_wrapper()
-
+# Following function converts serialized digit to decimal value
 def serialised_to_decimal(dataResult):
     index1 = 0
     for i in dataResult:
@@ -41,14 +34,11 @@ def serialised_to_decimal(dataResult):
             return index1
         index1 += 1
 
-
-cossim = np.zeros(10000)  # change 1000 to new number of test data(if needed)
-maxcos = np.zeros(10000)  # change 1000 to new number of test data(if needed)
-pred_number = np.zeros(10000)  # change 1000 to new number of test data(if needed)
-actual_number = np.zeros(10000)  # change 1000 to new number of test data(if needed)
+cossim = np.zeros(10000)  # used to store cosine similarity
+maxcos = np.zeros(10000)  # used to store maximum cosine similarity
+pred_number = np.zeros(10000)  # Stores predicted digit for a test data
+actual_number = np.zeros(10000)  # Stores the actual digit of thr test data
 confusion_matrix = np.zeros((10,10))
-correct_predictions = 0
-total_predictions = 10000  # change 1000 to new number of test data(if needed)
 index1 = 0
 index2 = 0
 for m in test:
@@ -56,20 +46,16 @@ for m in test:
         cossim[index1] = 1 - spatial.distance.cosine(m[0],n[0]) #  calculates cosine similarity
         if cossim[index1] >= maxcos[index1]:
             maxcos[index1] = cossim[index1]  #  assigns maximum value of cosine similarity
-            pred_number[index1] = serialised_to_decimal(training[index2][1])  #  predicted number
-            actual_number[index1] = test[index1][1]  # actual number
+            pred_number[index1] = serialised_to_decimal(training[index2][1])  #  predicted digit
+            actual_number[index1] = test[index1][1]  # actual digit
         index2 += 1
-        if index2 == 50000:  # change 5000 to new value of training data (if needed)
+        if index2 == 50000:
             index2 = 0
             break
-    # print "Test sample: %d, Actual number: %d, Predicted number: %d" %(index1+1,actual_number[index1], pred_number[index1])
     confusion_matrix[pred_number[index1]][actual_number[index1]] += 1
-    if (pred_number[index1] == actual_number[index1]):
-        correct_predictions += 1;
     index1 += 1
     if index1 == 10000: #  change 1000 to new value of test data (if needed)
         break
-
 
 print confusion_matrix
 # Calculate sum of each row
@@ -80,7 +66,7 @@ for i in confusion_matrix:
     for j in i:
         row_sum[index] += j
     index += 1
-
+#Calculate transpose
 transpose_confusion = confusion_matrix.transpose()
 index = 0
 # calculate sum of each column
@@ -101,6 +87,3 @@ for i in confusion_matrix:
         recall[index] = float(confusion_matrix[index][index])/float(column_sum[index])
         print "Recall of %d : %f" %(index, recall[index])
     index += 1
-
-print row_sum
-print column_sum
