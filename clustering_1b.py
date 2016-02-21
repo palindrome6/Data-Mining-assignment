@@ -1,5 +1,7 @@
+__author__ = 's158079'
 import numpy as np
-from random import randrange, uniform
+from random import randint
+import csv
 from scipy.spatial import distance
 
 def load_data_1b(fpath):
@@ -14,7 +16,12 @@ def load_data_1b(fpath):
 
 if __name__ == "__main__":
     c2 = load_data_1b("./data1b/C2.txt")
-
+c1 = np.zeros((len(c2),3))
+ind = 0
+for key1 in c2:
+    c1[ind][0] = key1[0]
+    c1[ind][1] = key1[1]
+    ind += 1
 
 key_max = np.zeros(2)
 key_min = np.zeros(2)
@@ -31,25 +38,26 @@ for key in c2:
 
 # print key_max, key_min
 
-# initialize k random centers
-k = 5
+k = input("Enter value of k:")
+
 center1 = np.zeros((k,2))
 center2 = np.zeros((k,2))
 
 old_center = np.zeros((k,2))
 new_center = np.zeros((k,2))
-# for key in range(0,k,1):
-#     old_center[key][0] = uniform(key_min[0], key_max[0])
-#     old_center[key][1] = uniform(key_min[1], key_max[1])
+
+# initialize centers to k random data points
 for key in range(0,k,1):
-    old_center[key][0] = c2[key][0]
-    old_center[key][1] = c2[key][1]
+    randnum = randint(0, len(c2))
+    old_center[key][0] = c2[randnum][0]
+    old_center[key][1] = c2[randnum][1]
 
-
+print "Initial centers: "
 print old_center
 c = 0
 class1 = np.zeros(len(c2))
 class2 = np.zeros(len(c2))
+c3 = np.zeros((len(c2),3))
 def kMeans(old_center,c):
     index1 = 0
     for item in c2:
@@ -60,6 +68,7 @@ def kMeans(old_center,c):
             if dist < max_distance:
                 max_distance = dist
                 class2[index1] = index2
+                c1[index1][2] = index2
             index2 += 1
         index1 += 1
     index = 0
@@ -80,16 +89,27 @@ def kMeans(old_center,c):
             temp += 1
     if temp == k:
         c += 1
-    if c == 2:
-        return new_center, class2
+    if c == 1:
+        return new_center, class2, c1
     else:
         old_center = new_center
         return kMeans(old_center,c)
 
 
-center1, class1 = kMeans(old_center,c)
+center1, class1, c3 = kMeans(old_center,c)
 
-print center1, class1
+print "Final centers:"
+print center1
+
+print "Final clusters:"
+print class1
+
+with open('result_1b_k4_1.csv', 'wt') as fp:
+    a = csv.writer(fp, delimiter=' ')
+    data = c3
+    a.writerows(data)
+# c3 contains the data points with their class
+
 
 
 
