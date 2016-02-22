@@ -38,7 +38,8 @@ for key in c2:
         key_min[0] = key[0]
     if key[1] < key_min[1]:
         key_min[1] = key[1]
-
+max_distance = distance.euclidean(key_max, key_min)
+print max_distance
 # print key_max, key_min
 
 k = input("Enter value of k:")
@@ -52,7 +53,7 @@ new_center = np.zeros((k,2))
 # initialize first center to a random data point
 randnum = randint(0, len(c2))
 old_center[0][0] = c2[randnum][0]
-old_center[1][1] = c2[randnum][1]
+old_center[0][1] = c2[randnum][1]
 
 numb_array = np.zeros(len(c2))
 index5 = 0
@@ -61,20 +62,39 @@ for lock in c2:
     index5 += 1
 
 prob_vector = np.zeros(len(c2))
-dist_sq_sum = np.zeros(k)
+dist_sq_sum = 0.0
 dist_sq = np.zeros((len(c2),k))
-for key in range(1, k, 1):
-    inde = 0
-    for key3 in c2:
-        dist_sq[inde][key-1] = math.pow(distance.euclidean(old_center[key-1], key3),2)
-        dist_sq_sum[key-1] += dist_sq[inde][key-1]
-        inde += 1
+d_square = np.zeros(len(c2))
+index = 0
+for temp in d_square:
+    d_square[index] = max_distance*max_distance
+    index += 1
+print d_square[0],d_square[0],d_square[0]
 
-    inde = 0
-    for key4 in dist_sq:
-        prob_vector[inde] = key4[key-1]/dist_sq_sum[key-1]
-        inde += 1
+for key in range(1, k, 1):
+    inde1 = 0
+    for key3 in c2:
+        dist_sq[inde1][key-1] = math.pow(distance.euclidean(old_center[key-1], key3),2)
+        # dist_sq_sum[key-1] += dist_sq[inde][key-1]
+        inde1 += 1
+
+    inde2 = 0
+    for nkey in c2:
+        for dkey in range(key-1, -1, -1):
+            if d_square[inde2] > dist_sq[inde2][dkey]:
+                d_square[inde2] = dist_sq[inde2][dkey]
+        dist_sq_sum += d_square[inde2]
+        print dist_sq_sum
+        inde2 += 1
+
+    inde3 = 0
+    for key4 in d_square:
+        prob_vector[inde3] = d_square[inde3]/dist_sq_sum
+        inde3 += 1
+
+    dist_sq_sum = 0
     # chosen_center = np.random.choice(numb_array,prob_vector)
+    #select point based on probablity distribution
     x = random.uniform(0, 1)
     cumulative_probability = 0.0
     for item, item_probability in zip(numb_array, prob_vector):
@@ -135,6 +155,15 @@ print center1
 
 print "Final clusters:"
 print class1
+cost_function = 0
+index = 0
+for temp1 in c2:
+    num = c3[index][2]
+    distance_1 = math.pow(distance.euclidean(c2[index], old_center[num]),2)
+    index+=1
+    cost_function += distance_1
+
+print cost_function
 
 # with open('result_1c_trial.csv', 'wt') as fp:
 #     a = csv.writer(fp, delimiter=' ')
