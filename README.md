@@ -12,4 +12,4 @@ To read data sets for the assignment 1b you can use the script "**dataloader_1b.
 
 "**clustering_1c.py**" contains an implementation of k-means++.
 
-"**clustering_1d.py**" contains an implementation of Gonzales'algorithm.
+"**clustering_1d.py**" contains an implementation of Gonzales' algorithm.
