@@ -3,6 +3,7 @@ import numpy as np
 from random import randint
 import csv
 from scipy.spatial import distance
+import math
 
 def load_data_1b(fpath):
     data = []
@@ -40,17 +41,23 @@ for key in c2:
 
 k = input("Enter value of k:")
 
+c1 = np.zeros((len(c2),3))
+ind = 0
+for key1 in c2:
+    c1[ind][0] = key1[0]
+    c1[ind][1] = key1[1]
+    ind += 1
+
 center1 = np.zeros((k,2))
 center2 = np.zeros((k,2))
 
 old_center = np.zeros((k,2))
 new_center = np.zeros((k,2))
 
-# initialize first center to a random data point
+# initialize first center to first data point
 
-randnum = randint(0, len(c2))
-old_center[0][0] = c2[randnum][0]
-old_center[0][1] = c2[randnum][1]
+old_center[0][0] = c2[0][0]
+old_center[0][1] = c2[0][1]
 
 print "Initial centers: "
 print old_center
@@ -60,6 +67,7 @@ class2 = np.zeros(len(c2))
 c3 = np.zeros((len(c2),3))
 def gonZales(old_center,c):
     index3 = 0
+    new_center = np.zeros((k,2))
     for item2 in c2:
         index4 = 0
         max_distance = distance.euclidean(key_min, key_max)
@@ -73,6 +81,17 @@ def gonZales(old_center,c):
             if index4 > c:
                 break
         index3 += 1
+    cost_function = 0
+    index = 0
+    max_dist = 0
+    for temp1 in c2:
+        num = c1[index][2]
+        distance_1 = distance.euclidean(c2[index], old_center[num])
+        index+=1
+        if distance_1 > max_dist:
+            max_dist = distance_1
+    cost_function = max_dist
+    print cost_function
     if c == k-1:
         return old_center,class2, c1
     else:
@@ -95,15 +114,45 @@ def gonZales(old_center,c):
 
 center1, class1, c3 = gonZales(old_center,c)
 
+c4 = np.zeros((len(c2)+k,3))
+ind = 0
+for key1 in c3:
+    c4[ind][0] = key1[0]
+    c4[ind][1] = key1[1]
+    c4[ind][2] = key1[2]
+
+    ind += 1
+
 print "Final centers:"
 print center1
 
 print "Final clusters:"
 print class1
-#
-with open('result_1d_tria1.csv', 'wt') as fp:
+
+counter = len(c2)
+keycount = 0
+for key5 in old_center:
+    c4[counter][0] = old_center[keycount][0]
+    c4[counter][1] = old_center[keycount][1]
+    c4[counter][2] = k
+    counter += 1
+    keycount += 1
+
+cost_function = 0
+index = 0
+max_dist = 0
+for temp1 in c2:
+    num = c3[index][2]
+    distance_1 = distance.euclidean(c2[index], old_center[num])
+    index+=1
+    if distance_1 > max_dist:
+        max_dist = distance_1
+cost_function = max_dist
+print cost_function
+
+with open('result_1d_k5test.csv', 'wt') as fp:
     a = csv.writer(fp, delimiter=' ')
-    data = c3
+    data = c4
     a.writerows(data)
 # c3 contains the data points with their class
 
